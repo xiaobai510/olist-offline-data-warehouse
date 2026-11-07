@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyd
+.venv/
+venv/
+
+# IDE and operating system
+.idea/
+.vscode/
+Thumbs.db
+Desktop.ini
+
+# Credentials
+.secrets/
+kaggle.json
+
+# Data and runtime outputs
+data/
+.cache/
+.hadoop/
+work/
+
+# Logs
+*.log
+
+# Local experiment scripts
+/Pandas.py
+/read.py
+/spark.py
+/download_olist.py
