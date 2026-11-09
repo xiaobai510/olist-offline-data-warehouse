@@ -235,3 +235,20 @@ ClickHouse 表使用 `ReplacingMergeTree` 和窗口结束时间版本号，Kafka
 - 当前输出使用 Kafka Sink 和 at-least-once 语义。
 - 下一阶段将消费 `olist_realtime_metrics` 写入 ClickHouse，并接入 Grafana。
 
+## 实时看板
+
+### Grafana 实时经营看板
+
+![Grafana 实时经营看板](../docs/screenshots/realtime/01_grafana_dashboard.png)
+
+### Flink 实时作业
+
+![Flink 实时作业](../docs/screenshots/realtime/02_flink_job.png)
+
+### ClickHouse 实时指标
+
+![ClickHouse 实时指标](../docs/screenshots/realtime/03_clickhouse_metrics.png)
+
+### ClickHouse 指标总量
+
+![ClickHouse 指标总量](../docs/screenshots/realtime/04_clickhouse_count.png)
