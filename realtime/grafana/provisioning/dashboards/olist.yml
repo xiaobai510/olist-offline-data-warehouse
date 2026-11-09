@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: Olist dashboards
+    orgId: 1
+    folder: Olist
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    options:
+      path: /var/lib/grafana/dashboards
+

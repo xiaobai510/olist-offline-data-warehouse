@@ -15,6 +15,12 @@ Flink SQL
 Kafka: olist_realtime_metrics
         ↓
 metric_consumer.py
+        ↓
+clickhouse_sink.py
+        ↓
+ClickHouse
+        ↓
+Grafana
 ```
 
 ## 数据事件
@@ -33,6 +39,14 @@ realtime/
 ├── event_generator.py
 ├── metric_consumer.py
 ├── check_stack.py
+├── clickhouse_sink.py
+├── clickhouse/
+│   └── init.sql
+├── grafana/
+│   ├── dashboards/
+│   └── provisioning/
+├── docker/
+│   └── clickhouse-grafana-compose.yml
 ├── flink_jobs/
 │   └── trade_metrics.sql
 └── runtimes/
@@ -166,6 +180,52 @@ powershell -ExecutionPolicy Bypass `
 ```
 
 日志位于 `realtime/logs/`。
+
+## 9. ClickHouse 与 Grafana
+
+ClickHouse 官方不提供 Windows Server 原生安装包。推荐在 Docker
+Desktop/WSL 2、Linux 虚拟机或 Linux 服务器中运行 ClickHouse 与
+Grafana。
+
+当前没有 Docker/WSL 时，Kafka 与 Flink 仍可完成事件计算，ClickHouse
+和 Grafana 配置也可以保留，但 ClickHouse 服务需要换到支持的运行环境。
+
+有 Docker 后执行：
+
+```powershell
+Set-Location "D:\pycharm\PythonProject"
+
+docker compose `
+  -f ".\realtime\docker\clickhouse-grafana-compose.yml" `
+  up -d
+```
+
+服务地址：
+
+```text
+ClickHouse HTTP：http://127.0.0.1:8123
+Grafana：http://127.0.0.1:3000
+Grafana 初始账号：admin / admin
+```
+
+启动 Kafka 指标写入 ClickHouse：
+
+```powershell
+& "D:\PythonProjects\PythonProject\.venv\Scripts\python.exe" `
+  ".\realtime\clickhouse_sink.py" --init-schema
+```
+
+ClickHouse 表使用 `ReplacingMergeTree` 和窗口结束时间版本号，Kafka
+重复消息最终会按相同窗口键合并。Grafana 查询使用 `FINAL` 获取稳定结果。
+
+仪表面板包括：
+
+- 近 15 分钟有效 GMV。
+- 近 15 分钟有效订单数。
+- 近 15 分钟支付金额。
+- 近 15 分钟支付订单数。
+- 近 30 分钟金额趋势。
+- 最新实时窗口明细。
 
 ## 设计说明
 

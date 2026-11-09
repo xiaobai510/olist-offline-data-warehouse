@@ -1,0 +1,18 @@
+apiVersion: 1
+
+datasources:
+  - name: ClickHouse Olist
+    uid: clickhouse-olist
+    type: grafana-clickhouse-datasource
+    access: proxy
+    isDefault: true
+    jsonData:
+      host: clickhouse
+      port: 8123
+      protocol: http
+      defaultDatabase: olist
+      username: default
+      traceInstrumentationEnabled: false
+    secureJsonData:
+      password: ""
+
